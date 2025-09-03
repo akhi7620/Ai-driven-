@@ -1,43 +1,105 @@
-<p align="center">
-  <a href="https://skillicons.dev">
-    <img src="https://skillicons.dev/icons?i=java,spring,postgresql,docker,hibernate,maven" />
-  </a>
-</p>
-<div align="center">
-	<code><img width="50" src="https://user-images.githubusercontent.com/25181517/192107854-765620d7-f909-4953-a6da-36e1ef69eea6.png" alt="HTTP" title="HTTP"/></code>
-	<code><img width="50" src="https://user-images.githubusercontent.com/25181517/192107858-fe19f043-c502-4009-8c47-476fc89718ad.png" alt="REST" title="REST"/></code>
-	<code><img width="50" src="https://user-images.githubusercontent.com/25181517/192108890-200809d1-439c-4e23-90d3-b090cf9a4eea.png" alt="IntelliJ" title="IntelliJ"/></code>
-	<code><img width="50" src="https://cdn.brighttalk.com/ams/california/images/channel/19357/image_840418.png" alt="Auth0" title="Auth0"/></code>
-	<code><img width="50" src="https://user-images.githubusercontent.com/25181517/117207242-07d5a700-adf4-11eb-975e-be04e62b984b.png" alt="Maven" title="Maven"/></code>		
-</div>
-<br>
-<div align="center">
-	<code><img width="50" src="https://user-images.githubusercontent.com/25181517/183890595-779a7e64-3f43-4634-bad2-eceef4e80268.png" alt="Angular" title="Angular"/></code>
-	<code><img width="50" src="https://user-images.githubusercontent.com/25181517/183890598-19a0ac2d-e88a-4005-a8df-1ee36782fde1.png" alt="TypeScript" title="TypeScript"/></code>
-	<code><img width="50" src="https://user-images.githubusercontent.com/25181517/183898674-75a4a1b1-f960-4ea9-abcb-637170a00a75.png" alt="CSS" title="CSS"/></code>
-	<code><img width="50" src="https://user-images.githubusercontent.com/25181517/192158954-f88b5814-d510-4564-b285-dff7d6400dad.png" alt="HTML" title="HTML"/></code>
-</div>
+# SENBackend
 
-# Public App deployment
-https://sen.skni.umcs.pl/login (login: testgithub password: testgithub)
+A Spring Boot backend for the SEN card game, featuring REST APIs, JWT authentication, game session management, AI opponents, and machine learning–powered player profiling.
 
-# Info
+## Features
 
-Bachelor's degree project
-Application simulates board game SEN with three automatic opponents (random, embedded, and machine learning). 
+- **User Authentication:** JWT-based login, registration, and user management.
+- **Game Logic:** Full game session lifecycle, deck management, player actions (draw, swap, skip, wake-up).
+- **AI Opponents:** Three types—random, heuristic, and ML-based (Weka decision tree).
+- **Machine Learning:** Player move recording, training pipeline, and personalized player profiles using clustering.
+- **REST API:** Endpoints for game actions, user management, and profile retrieval.
+- **PostgreSQL Integration:** Persistent storage for users, games, moves, and profiles.
+- **Docker Compose:** Easy local setup for backend and database.
 
-Appliaction deployed on public cloud.
+## Getting Started
 
-<img width="449" height="332" alt="image" src="https://github.com/user-attachments/assets/107ffea3-9afd-4b9f-a040-282248c2d11a" />
+### Prerequisites
 
-# Showcase
-<img width="1878" height="822" alt="image" src="https://github.com/user-attachments/assets/ea299140-7272-4604-bb7a-d1854f2fcae1" />
-<img width="688" height="619" alt="image" src="https://github.com/user-attachments/assets/674d1a37-5788-4f9a-aa6d-255ad4ee1627" />
-<img width="684" height="810" alt="image" src="https://github.com/user-attachments/assets/dfb82d7c-b09e-4045-96e1-1273b6e5aebe" />
+- Java 17+
+- Maven
+- Docker (for PostgreSQL)
+- Git
 
-# Frontend
-https://github.com/ppirog/SenFrontend
+### Setup
 
+1. **Clone the repository:**
+   ```sh
+   git clone <your-repo-url>
+   cd SenBackend
+   ```
+
+2. **Start PostgreSQL with Docker Compose:**
+   ```sh
+   docker compose -f compose.yaml up -d
+   ```
+
+3. **Build the project:**
+   ```sh
+   ./mvnw clean package
+   ```
+
+4. **Run the backend:**
+   ```sh
+   ./mvnw spring-boot:run
+   ```
+   Or:
+   ```sh
+   java -jar target/SenBackend-0.0.1-SNAPSHOT.jar
+   ```
+
+### Configuration
+
+Edit `src/main/resources/application.properties` to set database credentials, JWT secrets, and other settings.
+
+## Machine Learning: Player Profiles
+
+The backend computes per-player aggregates (win rate, average score, swap/skip rates, risk score) and clusters players using Weka KMeans. Profiles are stored in the `player_profiles` table and used to personalize AI behavior.
+
+**Key files:**
+- `profiles/PlayerProfile.java` — JPA entity for player profiles.
+- `profiles/PlayerFeatureExtractor.java` — Computes per-player features from DB.
+- `profiles/PlayerProfileTrainingService.java` — Trains clusters and persists profiles.
+- `profiles/PlayerProfileController.java` — API endpoints for profile retrieval and retraining.
+
+## API Endpoints
+
+- `POST /api/auth/login` — Login and receive JWT.
+- `POST /api/auth/register` — Register new user.
+- `GET /api/game/{id}` — Get game state.
+- `POST /api/game/{id}/action` — Perform game action.
+- `GET /api/player/{playerId}/profile` — Get player profile (ML cluster).
+- `POST /api/player/admin/retrain` — Retrain player profiles (admin only).
+
+See [API documentation](docs/) for full details.
+
+## Development
+
+- Code is organized by domain: `login/`, `gamelogic/`, `ai/`, `profiles/`.
+- Uses Spring Data JPA for persistence.
+- ML logic uses Weka (see `pom.xml` for dependency).
+
+## Testing
+
+- Unit and integration tests use JUnit and Testcontainers.
+- Run tests:
+  ```sh
+  ./mvnw test
+  ```
+
+## Contributing
+
+1. Fork the repo and create your branch.
+2. Make changes and commit.
+3. Submit a pull request.
+
+## License
+
+MIT (or specify your license).
+
+---
+
+**Contact:** [Your Name] — [your.email@example.com]
 
 
 
